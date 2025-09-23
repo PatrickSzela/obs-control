@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+cd "$SCRIPT_DIR"
+
+handle_error() {
+  notify-send -u critical -i com.obsproject.Studio -a "OBS Studio" -h string:desktop-entry:com.obsproject.Studio "Script error" "$1"
+  exit 1
+}
+
+source "$SCRIPT_DIR/.venv/bin/activate" || handle_error "Failed to enable the virtual environment!"
+
+python -u "$SCRIPT_DIR/main.py" "$@" || handle_error "Failed to execute the Python script!"
